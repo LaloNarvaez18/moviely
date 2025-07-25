@@ -1,0 +1,11 @@
+model ShowtimeFormat {
+  id Int @id @unique @default(autoincrement())
+  showtimeId Int
+  format String
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  showtime Showtime @relation(fields: [showtimeId], references: [id])
+
+  @@map("showtime_formats")
+}

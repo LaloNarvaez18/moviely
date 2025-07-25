@@ -1,0 +1,18 @@
+model Movie {
+  id Int @id @unique @default(autoincrement())
+  title String
+  description String? @db.Text
+  duration Int
+  release_date DateTime @db.Date
+  rate String
+  director String?
+  cast String?
+  poster String?
+  trailer String?
+  active Boolean? @default(true)
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  showtimes Showtime[]
+  @@map("movies")
+}

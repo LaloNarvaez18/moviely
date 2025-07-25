@@ -1,0 +1,11 @@
+model TheaterFormat {
+  id Int @id @unique @default(autoincrement())
+  theaterId Int
+  format String
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  theater Theater @relation(fields: [theaterId], references: [id])
+
+  @@map("theater_formats")
+}

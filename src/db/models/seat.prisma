@@ -1,0 +1,15 @@
+model Seat {
+  id Int @id @unique @default(autoincrement())
+  theaterId Int
+  row String @db.VarChar(2)
+  number Int
+  type String
+  price Int? @default(0)
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  theater Theater @relation(fields: [theaterId], references: [id])
+  bookings BookingSeat[]
+
+  @@map("seats")
+}

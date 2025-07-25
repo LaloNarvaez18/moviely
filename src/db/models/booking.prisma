@@ -1,0 +1,21 @@
+model Booking {
+  id Int @id @unique @default(autoincrement())
+  userId Int
+  showtimeId Int
+  date DateTime
+  status String @default("pending")
+  subtotal Int
+  extras Int? @default(0)
+  discount Int? @default(0)
+  payment_status String @default("pending")
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  showtime Showtime @relation(fields: [showtimeId], references: [id])
+
+  payments Payment[]
+  seats BookingSeat[]
+
+  @@map("bookings")
+}

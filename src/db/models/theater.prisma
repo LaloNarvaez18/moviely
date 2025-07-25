@@ -1,0 +1,16 @@
+model Theater {
+  id Int @id @unique @default(autoincrement())
+  name String @db.VarChar(30)
+  capacity Int
+  experience String
+  address String?
+  active Boolean? @default(true)
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  seats Seat[]
+  showtimes Showtime[]
+  formats TheaterFormat[]
+
+  @@map("theaters")
+}

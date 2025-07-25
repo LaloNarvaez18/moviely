@@ -1,0 +1,11 @@
+model BookingSeat {
+  seatId Int
+  bookingId Int
+  seat Seat @relation(fields: [seatId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id])
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  @@id([seatId, bookingId])
+  @@map("booking_seats")
+}

@@ -1,0 +1,16 @@
+model Payment {
+  id Int @id @unique @default(autoincrement())
+  bookingId Int
+  transactionId String
+  amount Int
+  method String
+  gateway_response String @db.Text()
+  status String? @default("pending")
+  processedt DateTime @db.Timestamp()
+  createdAt DateTime @db.Timestamp() @default(now())
+  updatedAt DateTime @db.Timestamp() @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@map("payments")
+}
