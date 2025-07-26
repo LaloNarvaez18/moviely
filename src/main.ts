@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import routerApi from './routes/index';
+import { handleZodError, handleError } from './middlewares/error.handler';
 
 export const createApp = () => {
   const app = express();
@@ -7,9 +9,10 @@ export const createApp = () => {
   app.use(express.json());
   app.use(cors());
 
-  app.get('/', (req, res) => {
-    res.send('Hello, World!');
-  });
+  routerApi(app);
+
+  app.use(handleZodError);
+  app.use(handleError);
 
   return app;
 }
