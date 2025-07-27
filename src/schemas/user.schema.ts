@@ -19,3 +19,8 @@ export const SignUpSchema = z.object({
   role: role.optional(),
   phone: phone.optional()
 });
+
+export const SignInSchema = z.object({
+  email: email.nonempty(),
+  password: password.nonempty()
+});
