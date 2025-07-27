@@ -1,7 +1,7 @@
 import express from 'express';
 import AuthService from '../services/auth.services';
 import { handleSchema } from '../middlewares/validation.handler';
-import { SignUpSchema, SignInSchema } from '../schemas/user.schema';
+import { SignUpSchema, SignInSchema } from '../schemas/auth.schema';
 
 const authRouter = express.Router();
 const service = new AuthService();
