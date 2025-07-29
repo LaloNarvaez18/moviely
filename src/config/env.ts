@@ -12,4 +12,10 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv extends z.infer<typeof envoirement> {}
   }
+
+  namespace Express {
+    interface Request {
+      file?: Multer.File;
+    }
+  }
 }

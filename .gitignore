@@ -219,4 +219,7 @@ $RECYCLE.BIN/
 # Docker Volumes
 postgres_data
 
+# Storage
+storage
+
 # End of https://www.toptal.com/developers/gitignore/api/node,windows,macos,linux

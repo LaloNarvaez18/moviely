@@ -1,13 +1,13 @@
 import express from 'express';
 import AuthService from '../services/auth.services';
-import { handleSchema } from '../middlewares/validation.handler';
+import validateRequestSchema from '../middlewares/validation.handler';
 import { SignUpSchema, SignInSchema } from '../schemas/auth.schema';
 
 const authRouter = express.Router();
 const service = new AuthService();
 
 authRouter.post('/signup',
-  handleSchema(SignUpSchema, 'body'),
+  validateRequestSchema(SignUpSchema, 'body'),
   async (req, res, next) => {
     try {
       const data = req.body;
@@ -20,7 +20,7 @@ authRouter.post('/signup',
 );
 
 authRouter.post('/signin',
-  handleSchema(SignInSchema, 'body'),
+  validateRequestSchema(SignInSchema, 'body'),
   async (req, res, next) => {
     try {
       const data = req.body;

@@ -1,17 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodObject } from 'zod';
 
-export const handleSchema = (
+const validateRequestSchema = (
   schema: ZodObject,
-  property: 'body' | 'query'
+  property: 'body' | 'query' | 'params'
 ) => {
-  return ( req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req[property];
-      schema.parse(data);
+      const result = schema.parse(data);
+      req[property] = result;
       next();
     } catch (err: any) {
-      next(err)
+      next(err);
     }
-  }
-}
+  };
+};
+
+export default validateRequestSchema;
