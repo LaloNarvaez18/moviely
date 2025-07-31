@@ -1,11 +1,13 @@
-import prisma from '../libs/prisma';
+import prisma from '../../libs/prisma';
 import {
   Movie,
+  CreateMovieDto,
+  UpdateMovieDto,
   IMovieRepository
-} from '../types/movies';
+} from '../../types/movies';
 
 export default class MoviePrismaRepository implements IMovieRepository {
-  async create(data: Movie): Promise<Movie> {
+  async create(data: CreateMovieDto): Promise<Movie> {
     return await prisma.movie.create({ data });
   }
 
@@ -21,7 +23,7 @@ export default class MoviePrismaRepository implements IMovieRepository {
     });
   }
 
-  async update(id: number, data: Partial<Movie>): Promise<Movie> {
+  async update(id: number, data: UpdateMovieDto): Promise<Movie> {
     return await prisma.movie.update({
       where: { id },
       data

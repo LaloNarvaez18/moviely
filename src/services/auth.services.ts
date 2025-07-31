@@ -1,50 +1,50 @@
-import prisma from '../libs/prisma';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import UserService from './user.services';
-import { SignUpProps, SignInProps } from '../schemas/schema.types';
+import {
+  User,
+  AuthenticatedUser,
+  CreateUserDto,
+  IUserRepository,
+  IAuthService
+} from '../types/users';
 
-export default class AuthService {
+export default class AuthService implements IAuthService {
   constructor(
-    private userService = new UserService()
-  ){}
+    private readonly repository: IUserRepository
+  ) { }
 
-  async signUp(data: SignUpProps) {
-    try {
-      const newUser = await prisma.user.create({
-        data: {
-          ...data,
-          birthdate: new Date(data.birthdate),
-          password: bcrypt.hashSync(data.password, 10)
-        },
-      });
-      return newUser;
-    } catch (error) {
-      throw error;
-    }
+  async signUpUser(user: CreateUserDto): Promise<AuthenticatedUser> {
+    const newUser: User = await this.repository.create({
+      ...user,
+      password: bcrypt.hashSync(user.password, 10)
+    });
+
+    const authUser = this.mapAuthenticatedUser(newUser);
+    return authUser;
   }
 
-  async signIn(data: SignInProps) {
-    try {
-      const user = await this.userService.findByEmail(data.email);
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const isMatch = bcrypt.compareSync(data.password, user.password);
-      if (!isMatch) {
-        throw new Error('Invalid password');
-      }
-
-      const payload = this.signToken({
-        sub: user.id,
-        scope: user.role
-      });
-
-      return payload;
-    } catch (error) {
-      throw error;
+  async signInUser(email: string, password: string): Promise<AuthenticatedUser> {
+    const user: User | null = await this.repository.findByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
     }
+
+    const isMatch = bcrypt.compareSync(password, user.password);
+    if (!isMatch) {
+      throw new Error('Invalid password');
+    }
+
+    const authUser = this.mapAuthenticatedUser(user);
+    return authUser;
+  }
+
+  private mapAuthenticatedUser(user: User): AuthenticatedUser {
+    const { password, ...userWithoutSensitive } = user
+    const { refreshToken, token } = this.signToken({
+      sub: user.id,
+      scope: user.role
+    });
+    return { ...userWithoutSensitive, token, refreshToken }
   }
 
   private signToken(payload: {
@@ -52,12 +52,7 @@ export default class AuthService {
     scope: string | null;
   }) {
     const token = jwt.sign(payload, process.env.JWT_SECRET);
-    return {
-      user: {
-        id: payload.sub,
-        role: payload.scope,
-      },
-      token
-    };
+    const refreshToken = '';
+    return { token, refreshToken }
   }
 }

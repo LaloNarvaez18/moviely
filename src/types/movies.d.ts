@@ -1,8 +1,7 @@
-import { BaseRepository } from "./repository"
-
-export type MovieRate = 'G' | 'PG' | 'PG-13' | 'R' | 'X' | 'NC-17'
+import Repository from "./repository"
 
 export interface Movie {
+  id: number
   title: string
   description: string | null
   duration: number
@@ -15,12 +14,15 @@ export interface Movie {
   active: boolean | null
 }
 
-export interface IMovieRepository extends BaseRepository<Movie>{}
+export interface CreateMovieDto extends Omit<Movie, 'id'>{}
+export interface UpdateMovieDto extends Partial<CreateMovieDto>{}
+
+export interface IMovieRepository extends Repository<CreateMovieDto, UpdateMovieDto, Movie>{}
 
 export interface IMovieService {
-  addMovie(movie: Movie): Promise<Movie>
+  createMovie(movie: CreateMovieDto): Promise<Movie>
   findMovies(): Promise<Movie[]>
   findMovieById(id: number): Promise<Movie | null>
-  updateMovie(id: number, data: Movie): Promise<Movie>
+  updateMovie(id: number, data: UpdateMovieDto): Promise<Movie>
   deleteMovie(id: number): Promise<Movie>
 }

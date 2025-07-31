@@ -1,7 +1,11 @@
-export interface BaseRepository<T = unknown>{
-  create(data: T): Promise<T>
-  findAll(): Promise<T[]>
-  findById(id: number): Promise<T | null>
-  update(id: number, data: Partial<T>): Promise<T>
-  delete(id: number): Promise<T>
+export default interface Repository<
+  CreateDto = unknown,
+  UpdateDto = unknown,
+  Entity = unknown
+> {
+  create(data: CreateDto): Promise<Entity>
+  findAll(): Promise<Entity[]>
+  findById(id: number): Promise<Entity | null>
+  update(id: number, data: UpdateDto): Promise<Entity>
+  delete(id: number): Promise<Entity>
 }

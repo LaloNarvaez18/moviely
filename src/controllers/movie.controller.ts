@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { IMovieService, Movie } from '../types/movies';
+import { IMovieRepository, IMovieService, Movie } from '../types/movies';
 import MovieService from '../services/movie.services';
+import MoviePrismaRepository from '../repositories/prisma/movie.repository';
 
-const service: IMovieService = new MovieService();
+const repository: IMovieRepository = new MoviePrismaRepository();
+const service: IMovieService = new MovieService(repository);
 
-export const getUniqueMovie = async (
+export const getByID = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,7 +20,7 @@ export const getUniqueMovie = async (
   }
 }
 
-export const getAllMovies = async (
+export const getAll = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -37,12 +39,9 @@ export const createMovie = async (
   next: NextFunction
 ) => {
   try {
-    const { body, file } = req;
-    const newMovie: Movie = await service.addMovie({
-      ...body,
-      duration: Number(body.duration),
-      release_date: new Date(body.release_date),
-      poster: file?.filename || null
+    const newMovie: Movie = await service.createMovie({
+      ...req.body,
+      poster: req.file?.filename || null
     });
     res.status(201).json(newMovie);
   } catch (err) {
@@ -61,7 +60,7 @@ export const updateMovie = async (
       ...req.body,
       poster: req.file?.filename
     });
-    res.status(201).json(movie);
+    res.status(200).json(movie);
   } catch (err) {
     next(err);
   }
@@ -75,7 +74,7 @@ export const deleteMovie = async(
   try {
     const id = Number(req.params.id);
     const movie: Movie = await service.deleteMovie(id);
-    res.status(201).json(movie);
+    res.status(200).json(movie);
   } catch (err) {
     next(err);
   }

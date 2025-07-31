@@ -1,34 +1,41 @@
-import MoviePrismaRepository from '../repositories/movie.repository';
 import {
   Movie,
+  CreateMovieDto,
+  UpdateMovieDto,
   IMovieRepository,
   IMovieService
 } from '../types/movies';
 
 export default class MovieService implements IMovieService {
-  private repository: IMovieRepository
+  constructor(
+    private readonly repository: IMovieRepository
+  ) { }
 
-  constructor() {
-    this.repository = new MoviePrismaRepository();
-  }
-
-  async addMovie(movie: Movie): Promise<Movie> {
-    return this.repository.create(movie);
+  async createMovie(movie: CreateMovieDto): Promise<Movie> {
+    return await this.repository.create(movie);
   }
 
   async findMovies(): Promise<Movie[]>{
-    return this.repository.findAll();
+    return await this.repository.findAll();
   }
 
   async findMovieById(id: number): Promise<Movie | null> {
-    return this.repository.findById(id);
+    return await this.repository.findById(id);
   }
 
-  async updateMovie(id: number, data: Movie): Promise<Movie> {
-    return this.repository.update(id, data);
+  async updateMovie(id: number, data: UpdateMovieDto): Promise<Movie> {
+    const movie = await this.findMovieById(id);
+    if (!movie) {
+      throw new Error("Movie not found");
+    }
+    return await this.repository.update(id, data);
   }
 
   async deleteMovie(id: number): Promise<Movie> {
-    return this.repository.delete(id);
+    const movie = await this.findMovieById(id);
+    if (!movie) {
+      throw new Error("Movie not found");
+    }
+    return await this.repository.delete(id);
   }
 }

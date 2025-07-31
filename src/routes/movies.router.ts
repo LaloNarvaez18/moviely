@@ -1,43 +1,33 @@
 import express from 'express';
-import uploadRequestFile from '../middlewares/upload.handler';
+import uploadFile from '../middlewares/upload.handler';
 import validateRequestSchema from '../middlewares/validation.handler';
-import {
-  MovieCreateSchema,
-  MovieIdSchema,
-  MovieUpdateSchema
-} from '../schemas/movie.schema';
-import {
-  getAllMovies,
-  getUniqueMovie,
-  createMovie,
-  updateMovie,
-  deleteMovie
-} from '../controllers/movie.controller';
+import { MovieCreateSchema, MovieIdSchema, MovieUpdateSchema } from '../schemas/movie.schema';
+import * as movies from '../controllers/movie.controller';
 
 const movieRouter = express.Router();
 
-movieRouter.get('/', getAllMovies);
+movieRouter.get('/', movies.getAll);
 
 movieRouter.get('/:id',
   validateRequestSchema(MovieIdSchema, 'params'),
-  getUniqueMovie
+  movies.getByID
 );
 
 movieRouter.post('/',
-  uploadRequestFile.single('poster'),
+  uploadFile.single('poster'),
   validateRequestSchema(MovieCreateSchema, 'body'),
-  createMovie
+  movies.createMovie
 );
 
 movieRouter.patch('/:id',
-  uploadRequestFile.single('poster'),
+  uploadFile.single('poster'),
   validateRequestSchema(MovieUpdateSchema, 'body'),
-  updateMovie
-)
+  movies.updateMovie
+);
 
 movieRouter.delete('/:id',
   validateRequestSchema(MovieIdSchema, 'params'),
-  deleteMovie
-)
+  movies.deleteMovie
+);
 
 export default movieRouter;
