@@ -1,14 +1,14 @@
 model Showtime {
   id Int @id @unique @default(autoincrement())
-  movieId Int
-  theaterId Int
+  movieId Int @map("movie_id")
+  theaterId Int @map("theater_id")
   price Int
   lang String
   start DateTime
   end DateTime
   active Boolean? @default(true)
-  createdAt DateTime @db.Timestamp() @default(now())
-  updatedAt DateTime @db.Timestamp() @updatedAt
+  createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
+  updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   movie Movie @relation(fields: [movieId], references: [id])
   theater Theater @relation(fields: [theaterId], references: [id])

@@ -2,15 +2,15 @@ model User {
   id Int @id @unique @default(autoincrement())
   dni String @db.VarChar(15) @unique
   name String @db.VarChar(30)
-  lastName String @db.VarChar(30)
+  lastName String @db.VarChar(30) @map("lastname")
   birthdate DateTime @db.Date
   email String @unique
   phone String? @db.VarChar(15)
   password String
-  recovery_token String?
+  recoveryToken String? @map("recovery_token")
   role String? @default("customer")
-  createdAt DateTime @db.Timestamp() @default(now())
-  updatedAt DateTime @db.Timestamp() @updatedAt
+  createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
+  updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   bookings Booking[]
 

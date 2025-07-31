@@ -5,8 +5,8 @@ model Theater {
   experience String
   address String?
   active Boolean? @default(true)
-  createdAt DateTime @db.Timestamp() @default(now())
-  updatedAt DateTime @db.Timestamp() @updatedAt
+  createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
+  updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   seats Seat[]
   showtimes Showtime[]

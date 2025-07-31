@@ -3,15 +3,15 @@ model Movie {
   title String
   description String? @db.Text
   duration Int
-  release_date DateTime @db.Date
+  releaseDate DateTime @db.Date @map("release_date")
   rate String
   director String?
   cast String?
   poster String?
   trailer String?
   active Boolean? @default(true)
-  createdAt DateTime @db.Timestamp() @default(now())
-  updatedAt DateTime @db.Timestamp() @updatedAt
+  createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
+  updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   showtimes Showtime[]
   @@map("movies")

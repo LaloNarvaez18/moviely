@@ -1,28 +1,28 @@
 -- CreateTable
 CREATE TABLE "bookings" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "showtimeId" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "showtime_id" INTEGER NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'pending',
     "subtotal" INTEGER NOT NULL,
     "extras" INTEGER DEFAULT 0,
     "discount" INTEGER DEFAULT 0,
     "payment_status" TEXT NOT NULL DEFAULT 'pending',
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "bookings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "booking_seats" (
-    "seatId" INTEGER NOT NULL,
-    "bookingId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "seat_id" INTEGER NOT NULL,
+    "booking_id" INTEGER NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
-    CONSTRAINT "booking_seats_pkey" PRIMARY KEY ("seatId","bookingId")
+    CONSTRAINT "booking_seats_pkey" PRIMARY KEY ("seat_id","booking_id")
 );
 
 -- CreateTable
@@ -38,8 +38,8 @@ CREATE TABLE "movies" (
     "poster" TEXT,
     "trailer" TEXT,
     "active" BOOLEAN DEFAULT true,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "movies_pkey" PRIMARY KEY ("id")
 );
@@ -47,15 +47,15 @@ CREATE TABLE "movies" (
 -- CreateTable
 CREATE TABLE "payments" (
     "id" SERIAL NOT NULL,
-    "bookingId" INTEGER NOT NULL,
-    "transactionId" TEXT NOT NULL,
+    "booking_id" INTEGER NOT NULL,
+    "transaction_id" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
     "method" TEXT NOT NULL,
     "gateway_response" TEXT NOT NULL,
     "status" TEXT DEFAULT 'pending',
-    "processedt" TIMESTAMP NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "processed_at" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "payments_pkey" PRIMARY KEY ("id")
 );
@@ -63,13 +63,13 @@ CREATE TABLE "payments" (
 -- CreateTable
 CREATE TABLE "seats" (
     "id" SERIAL NOT NULL,
-    "theaterId" INTEGER NOT NULL,
+    "theater_id" INTEGER NOT NULL,
     "row" VARCHAR(2) NOT NULL,
     "number" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
     "price" INTEGER DEFAULT 0,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "seats_pkey" PRIMARY KEY ("id")
 );
@@ -77,15 +77,15 @@ CREATE TABLE "seats" (
 -- CreateTable
 CREATE TABLE "showtimes" (
     "id" SERIAL NOT NULL,
-    "movieId" INTEGER NOT NULL,
-    "theaterId" INTEGER NOT NULL,
+    "movie_id" INTEGER NOT NULL,
+    "theater_id" INTEGER NOT NULL,
     "price" INTEGER NOT NULL,
     "lang" TEXT NOT NULL,
     "start" TIMESTAMP(3) NOT NULL,
     "end" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN DEFAULT true,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "showtimes_pkey" PRIMARY KEY ("id")
 );
@@ -93,10 +93,10 @@ CREATE TABLE "showtimes" (
 -- CreateTable
 CREATE TABLE "showtime_formats" (
     "id" SERIAL NOT NULL,
-    "showtimeId" INTEGER NOT NULL,
+    "showtime_id" INTEGER NOT NULL,
     "format" TEXT NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "showtime_formats_pkey" PRIMARY KEY ("id")
 );
@@ -109,8 +109,8 @@ CREATE TABLE "theaters" (
     "experience" TEXT NOT NULL,
     "address" TEXT,
     "active" BOOLEAN DEFAULT true,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "theaters_pkey" PRIMARY KEY ("id")
 );
@@ -118,10 +118,10 @@ CREATE TABLE "theaters" (
 -- CreateTable
 CREATE TABLE "theater_formats" (
     "id" SERIAL NOT NULL,
-    "theaterId" INTEGER NOT NULL,
+    "theater_id" INTEGER NOT NULL,
     "format" TEXT NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "theater_formats_pkey" PRIMARY KEY ("id")
 );
@@ -131,15 +131,15 @@ CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "dni" VARCHAR(15) NOT NULL,
     "name" VARCHAR(30) NOT NULL,
-    "lastName" VARCHAR(30) NOT NULL,
+    "lastname" VARCHAR(30) NOT NULL,
     "birthdate" DATE NOT NULL,
     "email" TEXT NOT NULL,
     "phone" VARCHAR(15),
     "password" TEXT NOT NULL,
     "recovery_token" TEXT,
     "role" TEXT DEFAULT 'customer',
-    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -178,31 +178,31 @@ CREATE UNIQUE INDEX "users_dni_key" ON "users"("dni");
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
-ALTER TABLE "bookings" ADD CONSTRAINT "bookings_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "bookings" ADD CONSTRAINT "bookings_showtimeId_fkey" FOREIGN KEY ("showtimeId") REFERENCES "showtimes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_showtime_id_fkey" FOREIGN KEY ("showtime_id") REFERENCES "showtimes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "booking_seats" ADD CONSTRAINT "booking_seats_seatId_fkey" FOREIGN KEY ("seatId") REFERENCES "seats"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "booking_seats" ADD CONSTRAINT "booking_seats_seat_id_fkey" FOREIGN KEY ("seat_id") REFERENCES "seats"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "booking_seats" ADD CONSTRAINT "booking_seats_bookingId_fkey" FOREIGN KEY ("bookingId") REFERENCES "bookings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "booking_seats" ADD CONSTRAINT "booking_seats_booking_id_fkey" FOREIGN KEY ("booking_id") REFERENCES "bookings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "payments" ADD CONSTRAINT "payments_bookingId_fkey" FOREIGN KEY ("bookingId") REFERENCES "bookings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "payments" ADD CONSTRAINT "payments_booking_id_fkey" FOREIGN KEY ("booking_id") REFERENCES "bookings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "seats" ADD CONSTRAINT "seats_theaterId_fkey" FOREIGN KEY ("theaterId") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "seats" ADD CONSTRAINT "seats_theater_id_fkey" FOREIGN KEY ("theater_id") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "showtimes" ADD CONSTRAINT "showtimes_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "showtimes" ADD CONSTRAINT "showtimes_movie_id_fkey" FOREIGN KEY ("movie_id") REFERENCES "movies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "showtimes" ADD CONSTRAINT "showtimes_theaterId_fkey" FOREIGN KEY ("theaterId") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "showtimes" ADD CONSTRAINT "showtimes_theater_id_fkey" FOREIGN KEY ("theater_id") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "showtime_formats" ADD CONSTRAINT "showtime_formats_showtimeId_fkey" FOREIGN KEY ("showtimeId") REFERENCES "showtimes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "showtime_formats" ADD CONSTRAINT "showtime_formats_showtime_id_fkey" FOREIGN KEY ("showtime_id") REFERENCES "showtimes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "theater_formats" ADD CONSTRAINT "theater_formats_theaterId_fkey" FOREIGN KEY ("theaterId") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "theater_formats" ADD CONSTRAINT "theater_formats_theater_id_fkey" FOREIGN KEY ("theater_id") REFERENCES "theaters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

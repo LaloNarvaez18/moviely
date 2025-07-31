@@ -1,15 +1,15 @@
 model Booking {
   id Int @id @unique @default(autoincrement())
-  userId Int
-  showtimeId Int
+  userId Int @map("user_id")
+  showtimeId Int @map("showtime_id")
   date DateTime
   status String @default("pending")
   subtotal Int
   extras Int? @default(0)
   discount Int? @default(0)
-  payment_status String @default("pending")
-  createdAt DateTime @db.Timestamp() @default(now())
-  updatedAt DateTime @db.Timestamp() @updatedAt
+  paymentStatus String @default("pending") @map("payment_status")
+  createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
+  updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id])
   showtime Showtime @relation(fields: [showtimeId], references: [id])
