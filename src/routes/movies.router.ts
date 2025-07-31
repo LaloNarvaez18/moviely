@@ -1,5 +1,5 @@
 import express from 'express';
-import uploadFile from '../middlewares/upload.handler';
+import { uploadFile } from '../middlewares/upload.handler';
 import validateRequestSchema from '../middlewares/validation.handler';
 import { MovieCreateSchema, MovieIdSchema, MovieUpdateSchema } from '../schemas/movie.schema';
 import * as movies from '../controllers/movie.controller';

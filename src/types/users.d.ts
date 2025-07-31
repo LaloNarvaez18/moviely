@@ -6,14 +6,14 @@ export interface User {
   name: string
   lastName: string
   password: string
-  recovery_token: string | null
+  recoveryToken: string | null
   birthdate: Date
   email: string
   phone: string | null
   role: string | null
 }
 
-export interface UserWithoutSensitive extends Omit<User, 'password' | 'recovery_token'> {}
+export interface UserWithoutSensitive extends Omit<User, 'password' | 'recoveryToken'> {}
 export interface CreateUserDto extends Omit<User, 'id'> {}
 export interface UpdateUserDto extends Partial<Omit<CreateUserDto, 'password'>> {}
 

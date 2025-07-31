@@ -5,7 +5,7 @@ export interface Movie {
   title: string
   description: string | null
   duration: number
-  release_date: Date
+  releaseDate: Date
   rate: string
   director: string | null
   cast: string | null

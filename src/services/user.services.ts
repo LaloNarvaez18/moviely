@@ -71,7 +71,7 @@ export default class UserService implements IUserService {
   }
 
   private mapUserWithoutSensitive(user: User) {
-    const { password, recovery_token, ...userWithoutSensitive } = user;
+    const { password, recoveryToken, ...userWithoutSensitive } = user;
     return userWithoutSensitive;
   }
 
