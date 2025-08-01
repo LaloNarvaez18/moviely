@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUserRepository, AuthenticatedUser } from '../types/users';
+import { IUserRepository, AuthenticatedUser, IJwtService, IUserService } from '../types/users';
 import UserPrismaRepository from '../repositories/prisma/user.repository';
 import AuthService from '../services/auth.services';
+import JwtService from '../services/jwt.services';
+import UserService from '../services/user.services';
 
 const repository: IUserRepository = new UserPrismaRepository();
-const service: AuthService = new AuthService(repository);
+const jwtService: IJwtService = new JwtService();
+const userService: IUserService = new UserService(repository);
+const service: AuthService = new AuthService(userService, jwtService);
 
 export const signUp = async (
   req: Request,

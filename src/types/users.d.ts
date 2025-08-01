@@ -2,7 +2,6 @@ import Repository from "./repository"
 
 export interface User {
   id: number
-  dni: string
   name: string
   lastName: string
   password: string
@@ -24,10 +23,11 @@ export interface IUserRepository extends Repository<CreateUserDto, UpdateUserDto
 export interface IUserService {
   createUser(data: CreateUserDto): Promise<UserWithoutSensitive>
   findUsers(): Promise<UserWithoutSensitive[]>
-  findUserById(id: number): Promise<UserWithoutSensitive | null>
-  findUserByEmail(email: string): Promise<UserWithoutSensitive | null>
+  findUserById(id: number): Promise<User | null>
+  findUserByEmail(email: string): Promise<User | null>
   updateUser(id: number, data: UpdateUserDto): Promise<UserWithoutSensitive>
   deleteUser(id: number): Promise<boolean>
+  toSafeUser(user: User): UserWithoutSensitive
 }
 
 export interface AuthenticatedUser extends UserWithoutSensitive {
@@ -38,4 +38,9 @@ export interface AuthenticatedUser extends UserWithoutSensitive {
 export interface IAuthService {
   signInUser(email: string, password: string): Promise<AuthenticatedUser>
   signUpUser(user: CreateUserDto): Promise<AuthenticatedUser>
+}
+
+export interface IJwtService {
+  signAccessToken(userId: number, role: string | null, additionalPayload?: {}): string
+  signRefreshToken(userId: number): string
 }

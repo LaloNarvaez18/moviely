@@ -1,30 +1,34 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {
   User,
   AuthenticatedUser,
   CreateUserDto,
-  IUserRepository,
-  IAuthService
+  IAuthService,
+  IUserService,
+  IJwtService,
+  UserWithoutSensitive
 } from '../types/users';
 
 export default class AuthService implements IAuthService {
   constructor(
-    private readonly repository: IUserRepository
+    private readonly userService: IUserService,
+    private readonly jwtService: IJwtService
   ) { }
 
   async signUpUser(user: CreateUserDto): Promise<AuthenticatedUser> {
-    const newUser: User = await this.repository.create({
-      ...user,
-      password: bcrypt.hashSync(user.password, 10)
-    });
+    const newUser: UserWithoutSensitive = await this.userService.createUser(user);
+    const token = this.jwtService.signAccessToken(newUser.id, newUser.role);
+    const refreshToken = this.jwtService.signRefreshToken(newUser.id);
 
-    const authUser = this.mapAuthenticatedUser(newUser);
-    return authUser;
+    return {
+      ...newUser,
+      token,
+      refreshToken
+    };
   }
 
   async signInUser(email: string, password: string): Promise<AuthenticatedUser> {
-    const user: User | null = await this.repository.findByEmail(email);
+    const user: User | null = await this.userService.findUserByEmail(email)
     if (!user) {
       throw new Error('User not found');
     }
@@ -34,25 +38,14 @@ export default class AuthService implements IAuthService {
       throw new Error('Invalid password');
     }
 
-    const authUser = this.mapAuthenticatedUser(user);
-    return authUser;
-  }
+    const token = this.jwtService.signAccessToken(user.id, user.role);
+    const refreshToken = this.jwtService.signRefreshToken(user.id);
+    const safeUser = this.userService.toSafeUser(user);
 
-  private mapAuthenticatedUser(user: User): AuthenticatedUser {
-    const { password, ...userWithoutSensitive } = user
-    const { refreshToken, token } = this.signToken({
-      sub: user.id,
-      scope: user.role
-    });
-    return { ...userWithoutSensitive, token, refreshToken }
-  }
-
-  private signToken(payload: {
-    sub: number;
-    scope: string | null;
-  }) {
-    const token = jwt.sign(payload, process.env.JWT_SECRET);
-    const refreshToken = '';
-    return { token, refreshToken }
+    return {
+      ...safeUser,
+      token,
+      refreshToken
+    };
   }
 }

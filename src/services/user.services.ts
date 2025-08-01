@@ -19,8 +19,7 @@ export default class UserService implements IUserService {
       password: bcrypt.hashSync(user.password, 10)
     });
 
-    const userWithoutSensitive = this.mapUserWithoutSensitive(newUser);
-    return userWithoutSensitive;
+    return this.toSafeUser(newUser);
   }
 
   async findUsers(): Promise<UserWithoutSensitive[]> {
@@ -29,25 +28,25 @@ export default class UserService implements IUserService {
       throw new Error("No users were found");
     }
 
-    return this.mapUsersWithoutSensitive(users);
+    return users.map((user) => this.toSafeUser(user));
   }
 
-  async findUserByEmail(email: string): Promise<UserWithoutSensitive | null> {
+  async findUserByEmail(email: string): Promise<User | null> {
     const user: User | null = await this.repository.findByEmail(email);
     if (!user) {
       throw new Error("User not found");
     }
 
-    return this.mapUserWithoutSensitive(user);
+    return user;
   }
 
-  async findUserById(id: number): Promise<UserWithoutSensitive | null> {
+  async findUserById(id: number): Promise<User | null> {
     const user: User | null = await this.repository.findById(id);
     if (!user) {
       throw new Error("User not found");
     }
 
-    return this.mapUserWithoutSensitive(user);
+    return user;
   }
 
   async updateUser(id: number, data: UpdateUserDto): Promise<UserWithoutSensitive> {
@@ -57,7 +56,8 @@ export default class UserService implements IUserService {
     }
 
     const updatedUser = await this.repository.update(id, data);
-    return this.mapUserWithoutSensitive(updatedUser);
+
+    return this.toSafeUser(updatedUser);
   }
 
   async deleteUser(id: number): Promise<boolean> {
@@ -70,12 +70,13 @@ export default class UserService implements IUserService {
     return true;
   }
 
-  private mapUserWithoutSensitive(user: User) {
-    const { password, recoveryToken, ...userWithoutSensitive } = user;
-    return userWithoutSensitive;
-  }
+  public toSafeUser(user: User): UserWithoutSensitive {
+    const {
+      password,
+      recoveryToken,
+      ...safeUser
+    } = user;
 
-  private mapUsersWithoutSensitive(users: User[]) {
-    return users.map((user) => this.mapUserWithoutSensitive(user))
+    return safeUser;
   }
 }
