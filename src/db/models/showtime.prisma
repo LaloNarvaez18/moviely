@@ -2,6 +2,8 @@ model Showtime {
   id Int @id @unique @default(autoincrement())
   movieId Int @map("movie_id")
   theaterId Int @map("theater_id")
+  format String
+  isImax Boolean @default(false)
   price Int
   lang String
   start DateTime
@@ -12,9 +14,7 @@ model Showtime {
 
   movie Movie @relation(fields: [movieId], references: [id])
   theater Theater @relation(fields: [theaterId], references: [id])
-
   bookings Booking[]
-  formats ShowtimeFormat[]
 
   @@map("showtimes")
 }

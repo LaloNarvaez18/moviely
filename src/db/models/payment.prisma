@@ -1,12 +1,10 @@
 model Payment {
   id Int @id @unique @default(autoincrement())
   bookingId Int @map("booking_id")
-  transactionId String @map("transaction_id")
+  transactionId String? @map("transaction_id") @default(dbgenerated("gen_random_uuid()"))
   amount Int
   method String
-  gatewayResponse String @db.Text() @map("gateway_response")
   status String? @default("pending")
-  processedAt DateTime @db.Timestamp() @map("processed_at")
   createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
   updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 

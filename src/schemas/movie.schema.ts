@@ -1,16 +1,17 @@
 import { z } from 'zod';
 
-const id = z.coerce.number().positive();
+const id = z.number().positive();
 const title = z.string();
 const description = z.string();
-const duration = z.coerce.number().positive();
+const duration = z.number().positive();
 const releaseDate = z.iso.date('Invalid date format').transform((val) => new Date(val));
 const rate = z.enum(['G', 'PG', 'PG-13', 'R', 'X', 'NC-17']);
 const director = z.string().max(30);
 const cast = z.string();
 const trailer = z.url();
-const active = z.string().transform((val) => val === 'true');
-const poster = z.string();
+const active = z.boolean()
+const genreIds = z.number().positive().array()
+const genreRemovedIds = z.number().positive().array()
 
 export const MovieCreateSchema = z.object({
   title: title,
@@ -18,11 +19,11 @@ export const MovieCreateSchema = z.object({
   duration: duration,
   releaseDate: releaseDate,
   rate: rate,
-  poster: poster.optional(),
   director: director.optional(),
   cast: cast.optional(),
   trailer: trailer.optional(),
-  active: active.optional()
+  active: active.optional(),
+  genreIds: genreIds.optional()
 });
 
 export const MovieUpdateSchema = z.object({
@@ -31,11 +32,12 @@ export const MovieUpdateSchema = z.object({
   duration: duration.optional(),
   release_date: releaseDate.optional(),
   rate: rate.optional(),
-  poster: poster.optional(),
   director: director.optional(),
   cast: cast.optional(),
   trailer: trailer.optional(),
-  active: active.optional()
+  active: active.optional(),
+  genreIds: genreIds.optional(),
+  genreRemovedIds: genreRemovedIds.optional(),
 });
 
 export const MovieIdSchema = z.object({

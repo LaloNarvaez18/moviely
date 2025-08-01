@@ -41,7 +41,6 @@ export const createMovie = async (
   try {
     const newMovie: Movie = await service.createMovie({
       ...req.body,
-      poster: req.file?.filename || null
     });
     res.status(201).json(newMovie);
   } catch (err) {
@@ -57,8 +56,7 @@ export const updateMovie = async (
   try {
     const id = Number(req.params.id);
     const movie: Movie | null = await service.updateMovie(id, {
-      ...req.body,
-      poster: req.file?.filename
+      ...req.body
     });
     res.status(200).json(movie);
   } catch (err) {

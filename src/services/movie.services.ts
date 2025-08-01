@@ -1,9 +1,9 @@
 import {
-  Movie,
   CreateMovieDto,
   UpdateMovieDto,
   IMovieRepository,
-  IMovieService
+  IMovieService,
+  MovieWithGenres
 } from '../types/movies';
 
 export default class MovieService implements IMovieService {
@@ -11,19 +11,19 @@ export default class MovieService implements IMovieService {
     private readonly repository: IMovieRepository
   ) { }
 
-  async createMovie(movie: CreateMovieDto): Promise<Movie> {
-    return await this.repository.create(movie);
+  async createMovie(data: CreateMovieDto): Promise<MovieWithGenres> {
+    return await this.repository.create(data);
   }
 
-  async findMovies(): Promise<Movie[]>{
+  async findMovies(): Promise<MovieWithGenres[]>{
     return await this.repository.findAll();
   }
 
-  async findMovieById(id: number): Promise<Movie | null> {
+  async findMovieById(id: number): Promise<MovieWithGenres | null> {
     return await this.repository.findById(id);
   }
 
-  async updateMovie(id: number, data: UpdateMovieDto): Promise<Movie> {
+  async updateMovie(id: number, data: UpdateMovieDto): Promise<MovieWithGenres> {
     const movie = await this.findMovieById(id);
     if (!movie) {
       throw new Error("Movie not found");
@@ -31,7 +31,7 @@ export default class MovieService implements IMovieService {
     return await this.repository.update(id, data);
   }
 
-  async deleteMovie(id: number): Promise<Movie> {
+  async deleteMovie(id: number): Promise<MovieWithGenres> {
     const movie = await this.findMovieById(id);
     if (!movie) {
       throw new Error("Movie not found");

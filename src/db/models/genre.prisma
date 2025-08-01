@@ -1,11 +1,10 @@
-model ShowtimeFormat {
+model Genre {
   id Int @id @unique @default(autoincrement())
-  showtimeId Int @map("showtime_id")
-  format String
+  name String @db.VarChar(30)
   createdAt DateTime @db.Timestamp() @default(now()) @map("created_at")
   updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
-  showtime Showtime @relation(fields: [showtimeId], references: [id])
+  movies Movie[]
 
-  @@map("showtime_formats")
+  @@map("genres")
 }

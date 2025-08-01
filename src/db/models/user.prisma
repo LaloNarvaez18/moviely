@@ -1,6 +1,5 @@
 model User {
   id Int @id @unique @default(autoincrement())
-  dni String @db.VarChar(15) @unique
   name String @db.VarChar(30)
   lastName String @db.VarChar(30) @map("lastname")
   birthdate DateTime @db.Date

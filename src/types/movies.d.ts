@@ -1,5 +1,10 @@
 import Repository from "./repository"
 
+export interface Genre {
+  id: number
+  name: string
+}
+
 export interface Movie {
   id: number
   title: string
@@ -14,15 +19,24 @@ export interface Movie {
   active: boolean | null
 }
 
-export interface CreateMovieDto extends Omit<Movie, 'id'>{}
-export interface UpdateMovieDto extends Partial<CreateMovieDto>{}
+export interface MovieWithGenres extends Movie {
+  genres: Genre[]
+}
 
-export interface IMovieRepository extends Repository<CreateMovieDto, UpdateMovieDto, Movie>{}
+export interface CreateMovieDto extends Omit<Movie, 'id'> {
+  genreIds?: number[]
+}
+
+export interface UpdateMovieDto extends Partial<CreateMovieDto>{
+  genreRemovedIds?: number[]
+}
+
+export interface IMovieRepository extends Repository<CreateMovieDto, UpdateMovieDto, MovieWithGenres>{}
 
 export interface IMovieService {
-  createMovie(movie: CreateMovieDto): Promise<Movie>
-  findMovies(): Promise<Movie[]>
-  findMovieById(id: number): Promise<Movie | null>
-  updateMovie(id: number, data: UpdateMovieDto): Promise<Movie>
-  deleteMovie(id: number): Promise<Movie>
+  createMovie(movie: CreateMovieDto): Promise<MovieWithGenres>
+  findMovies(): Promise<MovieWithGenres[]>
+  findMovieById(id: number): Promise<MovieWithGenres | null>
+  updateMovie(id: number, data: UpdateMovieDto): Promise<MovieWithGenres>
+  deleteMovie(id: number): Promise<MovieWithGenres>
 }

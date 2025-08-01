@@ -3,8 +3,8 @@ model Movie {
   title String
   description String? @db.Text
   duration Int
-  releaseDate DateTime @db.Date @map("release_date")
   rate String
+  releaseDate DateTime @db.Date @map("release_date")
   director String?
   cast String?
   poster String?
@@ -14,5 +14,7 @@ model Movie {
   updatedAt DateTime @db.Timestamp() @updatedAt @map("updated_at")
 
   showtimes Showtime[]
+  genres Genre[]
+
   @@map("movies")
 }

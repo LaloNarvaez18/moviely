@@ -14,13 +14,11 @@ movieRouter.get('/:id',
 );
 
 movieRouter.post('/',
-  uploadFile.single('poster'),
   validateRequestSchema(MovieCreateSchema, 'body'),
   movies.createMovie
 );
 
 movieRouter.patch('/:id',
-  uploadFile.single('poster'),
   validateRequestSchema(MovieUpdateSchema, 'body'),
   movies.updateMovie
 );

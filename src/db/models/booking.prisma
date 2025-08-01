@@ -15,7 +15,7 @@ model Booking {
   showtime Showtime @relation(fields: [showtimeId], references: [id])
 
   payments Payment[]
-  seats BookingSeat[]
+  seats Seat[]
 
   @@map("bookings")
 }
