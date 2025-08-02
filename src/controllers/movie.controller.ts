@@ -71,8 +71,8 @@ export const deleteMovie = async(
 ) => {
   try {
     const id = Number(req.params.id);
-    const movie: Movie = await service.deleteMovie(id);
-    res.status(200).json(movie);
+    const deleted: boolean = await service.deleteMovie(id);
+    res.status(200).json(deleted);
   } catch (err) {
     next(err);
   }

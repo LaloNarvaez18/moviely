@@ -38,5 +38,5 @@ export interface IMovieService {
   findMovies(): Promise<MovieWithGenres[]>
   findMovieById(id: number): Promise<MovieWithGenres | null>
   updateMovie(id: number, data: UpdateMovieDto): Promise<MovieWithGenres>
-  deleteMovie(id: number): Promise<MovieWithGenres>
+  deleteMovie(id: number): Promise<boolean>
 }

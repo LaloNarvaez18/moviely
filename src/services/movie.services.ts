@@ -28,14 +28,17 @@ export default class MovieService implements IMovieService {
     if (!movie) {
       throw new Error("Movie not found");
     }
+
     return await this.repository.update(id, data);
   }
 
-  async deleteMovie(id: number): Promise<MovieWithGenres> {
+  async deleteMovie(id: number): Promise<boolean> {
     const movie = await this.findMovieById(id);
     if (!movie) {
       throw new Error("Movie not found");
     }
-    return await this.repository.delete(id);
+
+    await this.repository.delete(id);
+    return true;
   }
 }
