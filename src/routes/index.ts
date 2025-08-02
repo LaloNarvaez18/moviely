@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import authRouter from './auth.router';
 import movieRouter from './movies.router';
 import userRouter from './users.router';
+import theaterRouter from './theaters.router';
 
 const routerApi = (app: Application) => {
   const router = express.Router();
@@ -9,7 +10,8 @@ const routerApi = (app: Application) => {
 
   router.use('/auth', authRouter);
   router.use('/movies', movieRouter);
-  router.use('/users', userRouter)
+  router.use('/users', userRouter);
+  router.use('/theaters', theaterRouter)
 }
 
 export default routerApi;
